@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Task, SubTask, Category, Priority, Note
 
 @admin.register(Task)
-class TaskAdmin(admin.MOdelAdmin):
+class TaskAdmin(admin.ModelAdmin):
     list_display = ('title', 'status', 'deadline', 'priority', 'category')
     list_filter = ('status', 'priority', 'category')
     search_fields = ('title', 'description')
@@ -15,8 +15,8 @@ class SubTaskAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-list_display = ('name',)
-search_fields = ('name',)
+    list_display = ('name',)
+    search_fields = ('name',)
 
 @admin.register(Priority)
 class PriorityAdmin(admin.ModelAdmin):
