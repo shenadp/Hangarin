@@ -10,19 +10,19 @@ class Command(BaseCommand):
 
         # Add fixed priorities & categories
 
-        priorities = ['High', 'Medium', 'Low', 'Critical', 'Optional']
+        priorities = ['high', 'medium', 'low', 'critical', 'optional']
         categories = ['Work', 'School', 'Personal', 'Finance', 'Projects']
 
         for p in priorities:
-            Priority.objects.get_or_creare(name=p)
+            Priority.objects.update_or_create(name=p)
         for c in categories:
-            Category.objects.get_or_create(name=c)
+            Category.objects.update_or_create(name=c)
 
         # Generate tasks
 
-        for _ in range(10):
+        for _ in range(20):
             task = Task.objects.create(
-                title=fake.sentence.(nb_words=5),
+                title=fake.sentence(nb_words=5),
                 description=fake.paragraph(nb_sentences=3),
                 deadline=timezone.make_aware(fake.date_time_this_month()),
                 status=fake.random_element(elements=['Pending', 'In Progress', 'Completed']),
@@ -32,7 +32,7 @@ class Command(BaseCommand):
         
         # Subtasks
 
-        for _ in range(3):
+        for _ in range(10):
             SubTask.objects.create(
                 title=fake.sentence(nb_words=3),
                 status=fake.random_element(elements=['Pending', 'In Progress', 'Completed']),
@@ -41,4 +41,8 @@ class Command(BaseCommand):
 
         # Notes
 
-        Note.objects.create(task=task, content=fake.paragraph(nb_sentences=2))
+        for _ in range(10):
+            Note.objects.create(
+                task=task, 
+                content=fake.paragraph(nb_sentences=2)
+            )

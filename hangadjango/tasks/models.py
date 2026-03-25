@@ -17,7 +17,7 @@ STATUS_CHOICES = [
 ]
 
 class Priority(BaseModel):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         verbose_name = "Priority"
@@ -27,7 +27,7 @@ class Priority(BaseModel):
         return self.name
 
 class Category(BaseModel):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         verbose_name = "Category"
