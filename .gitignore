@@ -1,0 +1,72 @@
+<<<<<<< HEAD
+# Virtual environment
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Database
+db.sqlite3
+
+# Environment variables
+.env
+
+# Static files collected
+staticfiles/
+
+# OS files
+.DS_Store
+Thumbs.db
+=======
+# ===============================
+# Python
+# ===============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ===============================
+# Virtual Environment
+# ===============================
+venv/
+env/
+.venv/
+
+# ===============================
+# Django
+# ===============================
+db.sqlite3
+*.log
+local_settings.py
+
+# ===============================
+# Environment Variables
+# ===============================
+.env
+
+# ===============================
+# VS Code
+# ===============================
+.vscode/
+
+# ===============================
+# macOS
+# ===============================
+.DS_Store
+
+# ===============================
+# Windows
+# ===============================
+Thumbs.db
+
+# ===============================
+# Migrations (Optional – if required keep them)
+# ===============================
+# Uncomment if your professor requires migrations
+# */migrations/*
+# !*/migrations/__init__.py
+>>>>>>> aedb3a2838c1fdb285cbd9dd3451374f5acc4beb

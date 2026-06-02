@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block title %}{% if form.instance.pk %}Edit Task{% else %}Add New Task{% endif %}{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <a href="{% url 'task-list' %}" class="btn btn-outline-secondary btn-sm mb-2">
+      <i class="fas fa-arrow-left me-1"></i> Back to Tasks
+    </a>
+    <h1>
+      {% if form.instance.pk %}
+        <i class="fas fa-pen me-2 text-primary"></i>Edit Task
+      {% else %}
+        <i class="fas fa-plus-circle me-2 text-primary"></i>Add New Task
+      {% endif %}
+    </h1>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card p-4">
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger mb-3">
+          {% for error in form.non_field_errors %}
+            <p class="mb-0">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="mb-4">
+          <label class="form-label mb-1"
+                 style="font-size:0.78rem; font-weight:700; text-transform:uppercase;
+                        letter-spacing:0.5px; color:#8a8f9d;">
+            {{ field.label }}
+            {% if field.field.required %}
+              <span style="color:#dc3545;">*</span>
+            {% endif %}
+          </label>
+
+          {% if field.field.widget.input_type == 'textarea' %}
+            <textarea
+              name="{{ field.html_name }}"
+              class="form-control {% if field.errors %}is-invalid{% endif %}"
+              rows="4"
+              style="border-radius:10px; font-family:'Nunito',sans-serif; font-size:0.875rem;"
+              >{{ field.value|default:'' }}</textarea>
+
+          {% elif field.field.widget.input_type == 'select' %}
+            <select
+              name="{{ field.html_name }}"
+              class="form-select {% if field.errors %}is-invalid{% endif %}"
+              style="border-radius:10px; font-size:0.875rem;">
+              {% for val, label in field.field.choices %}
+                <option value="{{ val }}"
+                  {% if field.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>
+                  {{ label }}
+                </option>
+              {% endfor %}
+            </select>
+
+          {% elif field.field.widget.input_type == 'date' %}
+            <input
+              type="date"
+              name="{{ field.html_name }}"
+              value="{{ field.value|date:'Y-m-d'|default:'' }}"
+              class="form-control {% if field.errors %}is-invalid{% endif %}"
+              style="border-radius:10px; font-size:0.875rem;" />
+
+          {% elif field.field.widget.input_type == 'datetime-local' %}
+            <input
+              type="datetime-local"
+              name="{{ field.html_name }}"
+              value="{{ field.value|date:'Y-m-d\TH:i'|default:'' }}"
+              class="form-control {% if field.errors %}is-invalid{% endif %}"
+              style="border-radius:10px; font-size:0.875rem;" />
+
+          {% else %}
+            <input
+              type="{{ field.field.widget.input_type }}"
+              name="{{ field.html_name }}"
+              value="{{ field.value|default:'' }}"
+              class="form-control {% if field.errors %}is-invalid{% endif %}"
+              style="border-radius:10px; font-size:0.875rem;" />
+          {% endif %}
+
+          {% for error in field.errors %}
+            <div class="invalid-feedback d-block mt-1">
+              <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+            </div>
+          {% endfor %}
+
+          {% if field.help_text %}
+            <div class="form-text" style="font-size:0.78rem;">{{ field.help_text }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+
+        <hr style="border-color:#f0f2f8;">
+
+        <div class="d-flex gap-2 mt-3">
+          <button type="submit" class="btn btn-primary px-4">
+            <i class="fas fa-save me-1"></i>
+            {% if form.instance.pk %}Save Changes{% else %}Create Task{% endif %}
+          </button>
+          <a href="{% url 'task-list' %}" class="btn btn-outline-secondary px-4">
+            <i class="fas fa-times me-1"></i> Cancel
+          </a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

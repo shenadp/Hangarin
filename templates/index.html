@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+
+    <!-- CSS -->
+    <link href="{{ url_for('static', filename='assets/vendor/fontawesome/css/fontawesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/vendor/fontawesome/css/solid.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/vendor/fontawesome/css/brands.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/css/master.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav id="sidebar" class="active">
+            <div class="sidebar-header">
+                <img src="{{ url_for('static', filename='assets/img/bootstraper-logo.png') }}" class="app-logo">
+            </div>
+
+            <ul class="list-unstyled components text-secondary">
+                <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#"><i class="fas fa-file-alt"></i> Forms</a></li>
+                <li><a href="#"><i class="fas fa-table"></i> Tables</a></li>
+                <li><a href="#"><i class="fas fa-chart-bar"></i> Charts</a></li>
+                <li><a href="#"><i class="fas fa-icons"></i> Icons</a></li>
+            </ul>
+        </nav>
+
+        <div id="body" class="active">
+            <nav class="navbar navbar-expand-lg navbar-white bg-white">
+                <button type="button" id="sidebarCollapse" class="btn btn-light">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+
+            <div class="content">
+                <div class="container">
+                    <h2 class="mt-4">Task Manager Dashboard</h2>
+                    <a href="{{ url_for('add_task') }}" class="btn btn-primary mb-3">Add New Task</a>
+
+                    <div class="row">
+                        {% for task in tasks %}
+                        <div class="col-md-4 mt-3">
+                            <div class="card p-3">
+                                <h5>{{ task.name }}</h5>
+                                <p>{{ task.desc }}</p>
+                                <a href="{{ url_for('edit_task', task_id=loop.index0) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ url_for('delete_task', task_id=loop.index0) }}" class="btn btn-sm btn-danger">Delete</a>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="col-12 mt-3">
+                            <div class="alert alert-info">No tasks available. Add a new task.</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

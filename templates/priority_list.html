@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Priorities{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1><i class="fas fa-flag me-2 text-primary"></i>Priorities</h1>
+  <a href="{% url 'priority-add' %}" class="btn btn-primary">
+    <i class="fas fa-plus me-1"></i> Add Priority
+  </a>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pri in priorities %}
+            <tr>
+              <td class="text-muted" style="font-size:0.8rem; width:48px;">
+                {{ forloop.counter }}
+              </td>
+              <td>
+                {% with p=pri.name|lower %}
+                  {% if p == 'critical' %}
+                    <span class="badge-status priority-critical">
+                      <i class="fas fa-circle-exclamation me-1"></i>{{ pri.name }}
+                    </span>
+                  {% elif p == 'high' %}
+                    <span class="badge-status priority-high">
+                      <i class="fas fa-arrow-up me-1"></i>{{ pri.name }}
+                    </span>
+                  {% elif p == 'medium' %}
+                    <span class="badge-status priority-medium">
+                      <i class="fas fa-minus me-1"></i>{{ pri.name }}
+                    </span>
+                  {% elif p == 'low' %}
+                    <span class="badge-status priority-low">
+                      <i class="fas fa-arrow-down me-1"></i>{{ pri.name }}
+                    </span>
+                  {% else %}
+                    <span class="badge-status priority-optional">
+                      <i class="fas fa-circle-dot me-1"></i>{{ pri.name }}
+                    </span>
+                  {% endif %}
+                {% endwith %}
+              </td>
+              <td class="text-end">
+                <!-- ← ADDED Edit button -->
+                <a href="{% url 'priority-edit' pri.pk %}"
+                   class="btn btn-primary btn-sm me-1">
+                  <i class="fas fa-pen me-1"></i> Edit
+                </a>
+                <a href="{% url 'priority-delete' pri.pk %}"
+                   class="btn btn-outline-danger btn-sm">
+                  <i class="fas fa-trash me-1"></i> Delete
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="text-center py-5 text-muted">
+                <i class="fas fa-flag fa-2x mb-2 d-block" style="color:#d0d4e8;"></i>
+                No priorities yet.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

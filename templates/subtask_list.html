@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}Sub Tasks{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1><i class="fas fa-list-check me-2 text-primary"></i>Sub Tasks</h1>
+  <a href="{% url 'subtask-add' %}" class="btn btn-primary">
+    <i class="fas fa-plus me-1"></i> Add Subtask
+  </a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Parent Task</th>
+          <th>Status</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for subtask in subtasks %}
+        <tr>
+          <td class="text-muted" style="font-size:0.8rem;">{{ forloop.counter }}</td>
+          <td style="font-weight:600; color:#1a1f36;">{{ subtask.title }}</td>
+          <td>
+            {% if subtask.task and subtask.task.pk %}
+              <a href="{% url 'task-view' subtask.task.pk %}"
+                 style="color:#3d5af1; text-decoration:none; font-weight:600;">
+                <i class="fas fa-link me-1" style="font-size:0.7rem;"></i>
+                {{ subtask.task.title }}
+              </a>
+            {% else %}
+              <span class="text-muted" style="font-size:0.85rem;">
+                <i class="fas fa-unlink me-1"></i> No parent task
+              </span>
+            {% endif %}
+          </td>
+          <td>
+            {% if subtask.status == 'Pending' %}
+              <span class="badge-status status-pending">Pending</span>
+            {% elif subtask.status == 'In Progress' %}
+              <span class="badge-status status-progress">In Progress</span>
+            {% elif subtask.status == 'Completed' %}
+              <span class="badge-status status-completed">Completed</span>
+            {% else %}
+              <span class="badge-status">{{ subtask.status }}</span>
+            {% endif %}
+          </td>
+          <td class="text-end">
+            <!-- ← ADDED Edit button -->
+            <a href="{% url 'subtask-edit' subtask.pk %}"
+               class="btn btn-primary btn-sm me-1">
+              <i class="fas fa-pen me-1"></i> Edit
+            </a>
+            <a href="{% url 'subtask-delete' subtask.pk %}"
+               class="btn btn-outline-danger btn-sm">
+              <i class="fas fa-trash me-1"></i> Delete
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center py-5 text-muted">
+            <i class="fas fa-list-check fa-2x mb-2 d-block"></i>
+            No subtasks found.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if is_paginated %}
+  <div class="card-footer border-0 d-flex align-items-center justify-content-between px-4 py-3"
+       style="background:#f8f9fd; border-radius:0 0 14px 14px;">
+    <small class="text-muted">
+      Showing <strong>{{ page_obj.start_index }}</strong>–<strong>{{ page_obj.end_index }}</strong>
+      of <strong>{{ paginator.count }}</strong> subtasks
+    </small>
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Prev</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Prev</span></li>
+        {% endif %}
+        <li class="page-item active">
+          <span class="page-link">{{ page_obj.number }}</span>
+        </li>
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Next</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

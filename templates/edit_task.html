@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Edit Task</title>
+    <link href="{{ url_for('static', filename='assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Edit Task</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label>Task Name</label>
+            <input type="text" name="task_name" class="form-control" value="{{ task.name }}" required>
+        </div>
+        <div class="mb-3">
+            <label>Description</label>
+            <textarea name="task_desc" class="form-control" required>{{ task.desc }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Update Task</button>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+</body>
+</html>

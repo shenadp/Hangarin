@@ -1,0 +1,459 @@
+{% extends 'base.html' %}
+{% block title %}My Tasks{% endblock %}
+{% block page_title %}My Tasks{% endblock %}
+
+{% block content %}
+
+<!-- Hero Banner -->
+<div class="hero-banner mb-4">
+  <h2>Welcome back, {{ request.user.username }}! 👋</h2>
+  <p>You have {{ total_tasks }} tasks in total. Keep pushing forward!</p>
+  <a href="{% url 'task-add' %}" class="btn-hero">
+    <i class="fas fa-plus"></i> New Task
+  </a>
+</div>
+
+<!-- ── Colorful Stat Cards ── -->
+<div class="row g-3 mb-4">
+
+  <!-- Purple -->
+  <div class="col-md-3 col-6">
+    <div class="rounded-3 p-3 position-relative overflow-hidden"
+         style="background:linear-gradient(135deg,#7c5cfc,#a78bfa); color:#fff; min-height:110px;">
+      <div style="font-size:1.6rem; font-weight:800; line-height:1;">
+        {{ total_tasks }}
+      </div>
+      <div style="font-size:0.72rem; font-weight:600; opacity:0.85; margin-top:4px;">Tasks</div>
+      <div style="position:absolute; bottom:10px; left:0; right:0; padding:0 12px;">
+        <svg viewBox="0 0 120 30" width="100%" height="30" preserveAspectRatio="none">
+          <polyline points="0,25 20,18 40,22 60,10 80,15 100,8 120,12"
+            fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div style="position:absolute; top:12px; right:12px; font-size:1.4rem; opacity:0.2;">
+        <i class="fas fa-tasks"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blue -->
+  <div class="col-md-3 col-6">
+    <div class="rounded-3 p-3 position-relative overflow-hidden"
+         style="background:linear-gradient(135deg,#3b82f6,#60a5fa); color:#fff; min-height:110px;">
+      <div style="font-size:1.6rem; font-weight:800; line-height:1;">
+        {{ tasks_today }}
+      </div>
+      <div style="font-size:0.72rem; font-weight:600; opacity:0.85; margin-top:4px;">Tasks Today</div>
+      <div style="position:absolute; bottom:10px; left:0; right:0; padding:0 12px;">
+        <svg viewBox="0 0 120 30" width="100%" height="30" preserveAspectRatio="none">
+          <polyline points="0,20 20,14 40,18 60,8 80,12 100,6 120,10"
+            fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div style="position:absolute; top:12px; right:12px; font-size:1.4rem; opacity:0.2;">
+        <i class="fas fa-calendar-day"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Yellow/Orange -->
+  <div class="col-md-3 col-6">
+    <div class="rounded-3 p-3 position-relative overflow-hidden"
+         style="background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#fff; min-height:110px;">
+      <div style="font-size:1.6rem; font-weight:800; line-height:1;">
+        {{ tasks_this_week }}
+      </div>
+      <div style="font-size:0.72rem; font-weight:600; opacity:0.85; margin-top:4px;">Tasks This Week</div>
+      <div style="position:absolute; bottom:10px; left:0; right:0; padding:0 12px;">
+        <svg viewBox="0 0 120 30" width="100%" height="30" preserveAspectRatio="none">
+          <polyline points="0,15 20,20 40,10 60,18 80,8 100,14 120,6"
+            fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div style="position:absolute; top:12px; right:12px; font-size:1.4rem; opacity:0.2;">
+        <i class="fas fa-calendar-week"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Red/Pink -->
+  <div class="col-md-3 col-6">
+    <div class="rounded-3 p-3 position-relative overflow-hidden"
+         style="background:linear-gradient(135deg,#ef4444,#f87171); color:#fff; min-height:110px;">
+      <div style="font-size:1.6rem; font-weight:800; line-height:1;">
+        {{ completed_tasks }}
+      </div>
+      <div style="font-size:0.72rem; font-weight:600; opacity:0.85; margin-top:4px;">Completed Tasks</div>
+      <div style="position:absolute; bottom:10px; left:0; right:0; padding:0 12px;">
+        <!-- Mini bar chart like the reference -->
+        <svg viewBox="0 0 120 30" width="100%" height="30" preserveAspectRatio="none">
+          {% for h in "151820121622182014" %}{% endfor %}
+          <rect x="5"  y="10" width="8" height="20" rx="2" fill="rgba(255,255,255,0.3)"/>
+          <rect x="18" y="6"  width="8" height="24" rx="2" fill="rgba(255,255,255,0.5)"/>
+          <rect x="31" y="14" width="8" height="16" rx="2" fill="rgba(255,255,255,0.3)"/>
+          <rect x="44" y="4"  width="8" height="26" rx="2" fill="rgba(255,255,255,0.5)"/>
+          <rect x="57" y="12" width="8" height="18" rx="2" fill="rgba(255,255,255,0.3)"/>
+          <rect x="70" y="8"  width="8" height="22" rx="2" fill="rgba(255,255,255,0.5)"/>
+          <rect x="83" y="16" width="8" height="14" rx="2" fill="rgba(255,255,255,0.3)"/>
+          <rect x="96" y="6"  width="8" height="24" rx="2" fill="rgba(255,255,255,0.5)"/>
+          <rect x="109" y="10" width="8" height="20" rx="2" fill="rgba(255,255,255,0.3)"/>
+        </svg>
+      </div>
+      <div style="position:absolute; top:12px; right:12px; font-size:1.4rem; opacity:0.2;">
+        <i class="fas fa-circle-check"></i>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Split Light/Dark Chart Card ── -->
+<div class="card mb-4 overflow-hidden" style="border-radius:16px;">
+  <div class="d-flex align-items-center justify-content-between px-4 pt-4 pb-2">
+    <div>
+      <div style="font-weight:800; font-size:1.1rem; color:var(--text-main);">Task Activity</div>
+      <div style="font-size:0.75rem; color:var(--text-muted);">Last 7 days overview</div>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="px-3 py-1 rounded-2 border-0"
+              style="background:#f0f0f0; font-size:0.78rem; font-weight:600; color:#666;">Day</button>
+      <button class="px-3 py-1 rounded-2 border-0"
+              style="background:#7c5cfc; font-size:0.78rem; font-weight:600; color:#fff;">Week</button>
+      <button class="px-3 py-1 rounded-2 border-0"
+              style="background:#f0f0f0; font-size:0.78rem; font-weight:600; color:#666;">Month</button>
+    </div>
+  </div>
+
+ <!-- Chart container -->
+  <div style="padding:16px 24px 8px;">
+    <canvas id="taskChart" height="80"></canvas>
+  </div>
+  <!-- Bottom stats bar -->
+  <div style="display:flex; border-top:1px solid var(--border);">
+    <div class="text-center py-3 flex-fill" style="border-right:1px solid var(--border);">
+      <div style="font-size:0.7rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px;">Total</div>
+      <div style="font-size:1.1rem; font-weight:800; color:var(--text-main);">{{ total_tasks }}</div>
+      <div style="height:3px; background:#7c5cfc; border-radius:2px; width:40px; margin:4px auto 0;"></div>
+    </div>
+    <div class="text-center py-3 flex-fill" style="border-right:1px solid var(--border);">
+      <div style="font-size:0.7rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px;">Today</div>
+      <div style="font-size:1.1rem; font-weight:800; color:var(--text-main);">{{ tasks_today }}</div>
+      <div style="height:3px; background:#3b82f6; border-radius:2px; width:40px; margin:4px auto 0;"></div>
+    </div>
+    <div class="text-center py-3 flex-fill" style="border-right:1px solid var(--border);">
+      <div style="font-size:0.7rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px;">This Week</div>
+      <div style="font-size:1.1rem; font-weight:800; color:var(--text-main);">{{ tasks_this_week }}</div>
+      <div style="height:3px; background:#f59e0b; border-radius:2px; width:40px; margin:4px auto 0;"></div>
+    </div>
+    <div class="text-center py-3 flex-fill" style="border-right:1px solid var(--border);">
+      <div style="font-size:0.7rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px;">Completed</div>
+      <div style="font-size:1.1rem; font-weight:800; color:var(--text-main);">{{ completed_tasks }}</div>
+      <div style="height:3px; background:#16a34a; border-radius:2px; width:40px; margin:4px auto 0;"></div>
+    </div>
+    <div class="text-center py-3 flex-fill">
+      <div style="font-size:0.7rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px;">Pending</div>
+      <div style="font-size:1.1rem; font-weight:800; color:var(--text-main);">{{ tasks_today }}</div>
+      <div style="height:3px; background:#ef4444; border-radius:2px; width:40px; margin:4px auto 0;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Task Table Card -->
+<div class="card">
+  <div class="card-header d-flex align-items-center justify-content-between py-3 px-4"
+       style="background:#fff; border-bottom:1px solid #f0f2f8; border-radius:14px 14px 0 0;">
+    <span style="font-weight:700; font-size:1rem; color:#1a1f36;">Task List</span>
+    <div class="d-flex gap-2 align-items-center">
+      <select class="form-select form-select-sm" style="width:140px; border-radius:8px; font-size:0.8rem;"
+        onchange="window.location.href='?sort='+this.value">
+        <option value="">Sort By</option>
+        <option value="deadline"  {% if request.GET.sort == 'deadline'  %}selected{% endif %}>Deadline</option>
+        <option value="priority"  {% if request.GET.sort == 'priority'  %}selected{% endif %}>Priority</option>
+        <option value="status"    {% if request.GET.sort == 'status'    %}selected{% endif %}>Status</option>
+        <option value="title"     {% if request.GET.sort == 'title'     %}selected{% endif %}>Title</option>
+      </select>
+      <button class="btn btn-sm btn-primary" data-bs-toggle="collapse" data-bs-target="#filterBar">
+        <i class="fas fa-filter"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Collapsible Filter Bar -->
+  <div class="collapse {% if request.GET.status or request.GET.category or request.GET.priority %}show{% endif %}"
+       id="filterBar">
+    <div class="px-4 py-3 border-bottom" style="background:#f8f9fd;">
+      <form method="GET" class="row g-2 align-items-end">
+        {% if request.GET.sort %}
+          <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+        {% endif %}
+        <div class="col-md-3">
+          <label class="form-label mb-1"
+                 style="font-size:0.75rem; font-weight:700; color:#8a8f9d; text-transform:uppercase;">
+            Status
+          </label>
+          <select name="status" class="form-select form-select-sm" style="border-radius:8px;">
+            <option value="">All</option>
+            <option value="Pending"     {% if request.GET.status == 'Pending'     %}selected{% endif %}>Pending</option>
+            <option value="In Progress" {% if request.GET.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+            <option value="Completed"   {% if request.GET.status == 'Completed'   %}selected{% endif %}>Completed</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label mb-1"
+                 style="font-size:0.75rem; font-weight:700; color:#8a8f9d; text-transform:uppercase;">
+            Category
+          </label>
+          <select name="category" class="form-select form-select-sm" style="border-radius:8px;">
+            <option value="">All</option>
+            {% for cat in categories %}
+              <option value="{{ cat.id }}"
+                {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+                {{ cat.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label mb-1"
+                 style="font-size:0.75rem; font-weight:700; color:#8a8f9d; text-transform:uppercase;">
+            Priority
+          </label>
+          <select name="priority" class="form-select form-select-sm" style="border-radius:8px;">
+            <option value="">All</option>
+            {% for pri in priorities %}
+              <option value="{{ pri.id }}"
+                {% if request.GET.priority == pri.id|stringformat:"s" %}selected{% endif %}>
+                {{ pri.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+          <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+          <a href="{% url 'task-list' %}" class="btn btn-outline-secondary btn-sm">Reset</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Task Table -->
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Deadline</th>
+          <th>Status</th>
+          <th>Category</th>
+          <th>Priority</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+        <tr>
+          <td style="font-weight:600; color:#1a1f36;">{{ task.title }}</td>
+          <td>{{ task.deadline|date:"M. j, Y, g:i a" }}</td>
+          <td>
+            {% if task.status == 'Pending' %}
+              <span class="badge-status status-pending">Pending</span>
+            {% elif task.status == 'In Progress' %}
+              <span class="badge-status status-progress">In Progress</span>
+            {% elif task.status == 'Completed' %}
+              <span class="badge-status status-completed">Completed</span>
+            {% else %}
+              <span class="badge-status">{{ task.status }}</span>
+            {% endif %}
+          </td>
+          <td>{{ task.category }}</td>
+          <td>
+            {% with p=task.priority.name|lower %}
+              {% if p == 'critical' %}
+                <span class="badge-status priority-critical">{{ task.priority }}</span>
+              {% elif p == 'high' %}
+                <span class="badge-status priority-high">{{ task.priority }}</span>
+              {% elif p == 'medium' %}
+                <span class="badge-status priority-medium">{{ task.priority }}</span>
+              {% elif p == 'low' %}
+                <span class="badge-status priority-low">{{ task.priority }}</span>
+              {% else %}
+                <span class="badge-status priority-optional">{{ task.priority }}</span>
+              {% endif %}
+            {% endwith %}
+          </td>
+          <td class="text-end">
+            <a href="{% url 'task-view' task.pk %}" class="btn btn-primary btn-sm">View</a>
+            <a href="{% url 'task-delete' task.pk %}" class="btn btn-outline-danger btn-sm">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center py-5 text-muted">
+            <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+            No tasks found.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+  <div class="card-footer border-0 d-flex align-items-center justify-content-between px-4 py-3"
+       style="background:#f8f9fd; border-radius:0 0 14px 14px;">
+    <small class="text-muted">
+      Showing <strong>{{ page_obj.start_index }}</strong>–<strong>{{ page_obj.end_index }}</strong>
+      of <strong>{{ paginator.count }}</strong> tasks
+    </small>
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page=1{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">«</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Prev</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">«</span></li>
+          <li class="page-item disabled"><span class="page-link">Prev</span></li>
+        {% endif %}
+        {% for num in paginator.page_range %}
+          {% if page_obj.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ num }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">{{ num }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Next</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ paginator.num_pages }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">»</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Next</span></li>
+          <li class="page-item disabled"><span class="page-link">»</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('taskChart').getContext('2d');
+
+  const labels    = {{ chart_labels|safe }};
+  const pending   = {{ chart_pending|safe }};
+  const progress  = {{ chart_progress|safe }};
+  const completed = {{ chart_completed|safe }};
+
+  // Split gradient: left white, right dark
+  const gradientPending = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+  gradientPending.addColorStop(0,   'rgba(245,158,11,0.15)');
+  gradientPending.addColorStop(0.5, 'rgba(245,158,11,0.05)');
+  gradientPending.addColorStop(1,   'rgba(245,158,11,0.0)');
+
+  const gradientProgress = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+  gradientProgress.addColorStop(0,   'rgba(124,92,252,0.15)');
+  gradientProgress.addColorStop(0.5, 'rgba(124,92,252,0.05)');
+  gradientProgress.addColorStop(1,   'rgba(124,92,252,0.0)');
+
+  const gradientCompleted = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+  gradientCompleted.addColorStop(0,   'rgba(22,163,74,0.15)');
+  gradientCompleted.addColorStop(0.5, 'rgba(22,163,74,0.05)');
+  gradientCompleted.addColorStop(1,   'rgba(22,163,74,0.0)');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Pending',
+          data: pending,
+          borderColor: '#f59e0b',
+          backgroundColor: gradientPending,
+          borderWidth: 2.5,
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#f59e0b',
+          pointRadius: 4,
+          pointHoverRadius: 7,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        },
+        {
+          label: 'In Progress',
+          data: progress,
+          borderColor: '#7c5cfc',
+          backgroundColor: gradientProgress,
+          borderWidth: 2.5,
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#7c5cfc',
+          pointRadius: 4,
+          pointHoverRadius: 7,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        },
+        {
+          label: 'Completed',
+          data: completed,
+          borderColor: '#16a34a',
+          backgroundColor: gradientCompleted,
+          borderWidth: 2.5,
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#16a34a',
+          pointRadius: 4,
+          pointHoverRadius: 7,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1a1a2e',
+          titleColor: '#fff',
+          bodyColor: 'rgba(255,255,255,0.7)',
+          borderColor: '#2a2a3e',
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 10,
+          callbacks: {
+            label: function(context) {
+              return ' ' + context.dataset.label + ': ' + context.parsed.y + ' tasks';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { color: '#8a8fa8', font: { size: 11 } }
+        },
+        y: {
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { color: '#8a8fa8', font: { size: 11 }, stepSize: 1 },
+          beginAtZero: true,
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}
